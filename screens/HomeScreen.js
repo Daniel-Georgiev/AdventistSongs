@@ -19,17 +19,37 @@ export default class HomeScreen extends React.Component {
     header: null,
   };
 
+  state = {
+    songs: songList
+  }
+
 
   performTagSearch(text){
-    let output = [];
-    songList.forEach((song, idx) => {
-      song.tags.forEach((tag, idx)=>{
-        if(tag.includes(text.toLowerCase())){
-          output.push(song)
-        }
+    if(text !== ''){
+      let output = [];
+      songList.forEach((song, idx) => {
+        song.tags.forEach((tag, idx)=>{
+          if(tag.includes(text.toLowerCase())){
+            if(output.indexOf(song) === -1)
+            output.push(song)
+          }
+        })
       })
+      this.setState({
+        songs: output
+      })
+    }else{
+      this.setState({
+        songs: songList
+      })
+    }
+  }
+
+  resetSearch(){
+    console.log(songList)
+    this.setState({
+      songs: songList
     })
-    console.log(output)
   }
 
   render() {
@@ -39,15 +59,15 @@ export default class HomeScreen extends React.Component {
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
           <SearchBar style={styles.searchBar}
             lightTheme
-            onChangeText={this.performTagSearch}
+            onChangeText={this.performTagSearch.bind(this)}
             placeholder='Type Here...' />
           <View style={styles.songList}>
             {
-              songList.map((l, i) => (
+              this.state.songs.map((l, i) => (
                 <ListItem
                   title={l.name}
                   onPress={() =>
-                    navigate('Song', { song: songList[i] })
+                    navigate('Song', { song: this.state.songs[i] })
                   }
                   subtitle={l.subtitle}
                   key={`${l}_${i}`}

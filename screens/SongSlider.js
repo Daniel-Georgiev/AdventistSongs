@@ -27,6 +27,7 @@ export default class SongSlider extends React.Component {
           return (
             <Card
               title={null}
+              key={text}
               containerStyle={{ padding: 0, width: SCREEN_WIDTH - 30 }}
             >
               <Text style={styles.text}>
@@ -35,7 +36,7 @@ export default class SongSlider extends React.Component {
             </Card>
           );
         }}
-        keyExtractor={(item, index) => index}
+        keyExtractor={(item, index) => index.toString()}
       />
     );
   }
